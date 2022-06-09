@@ -134,25 +134,35 @@ void Alignment() {
 	char buf[256]; 
 	int err, TraceLength, TraceNum,i; 
 	FILE* rfp, * wfp; 
-
-	
-	
 	
 	float* data1, * data2;  	
-		sprintf_s(buf, 256 * sizeof(char)/*sizeof(buf)*/, "%s%s", _FOLD_, TraceFN);	if ((err = fopen_s(&rfp, buf, "rb"))) { 		printf("File Open Error1!!\n");	
-			}
+	sprintf_s(buf, 256 * sizeof(char)/*sizeof(buf)*/, "%s%s", _FOLD_, TraceFN);	
+	if ((err = fopen_s(&rfp, buf, "rb"))) 
+	{ 		
+		printf("File Open Error1!!\n");	
+	}
 	
-		sprintf_s(buf, 256 * sizeof(char), "%s%s", _FOLD_, AlignedTraceFN);
-	if ((err = fopen_s(&wfp, buf, "wb"))) { 
+	sprintf_s(buf, 256 * sizeof(char), "%s%s", _FOLD_, AlignedTraceFN);
+	if ((err = fopen_s(&wfp, buf, "wb"))) 
+	{ 
 		printf("File Open Error2!!\n");
 	}
 
-		fread(&TraceLength, sizeof(int), 1, rfp);  	fwrite(&TraceLength, sizeof(int), 1, wfp);	fread(&TraceNum, sizeof(int), 1, rfp);   	fwrite(&TraceNum, sizeof(int), 1, wfp);
+	fread(&TraceLength, sizeof(int), 1, rfp);  	
+	fwrite(&TraceLength, sizeof(int), 1, wfp);	
+	fread(&TraceNum, sizeof(int), 1, rfp);   	
+	fwrite(&TraceNum, sizeof(int), 1, wfp);
 
-		data1 = (float*)calloc(TraceLength, sizeof(float)); 	data2 = (float*)calloc(TraceLength, sizeof(float));	 
-		fread(data1, sizeof(float), TraceLength, rfp); 	fwrite(data1, sizeof(float), TraceLength, wfp); 
-		for (i = 1; i < TraceNum; i++) {
-		fread(data2, sizeof(float), TraceLength, rfp); 		SubAligned(data1, data2, windowsize, stepsize, threshold, TraceLength);  		fwrite(data2, sizeof(float), TraceLength, wfp);  	}
+	data1 = (float*)calloc(TraceLength, sizeof(float)); 	
+	data2 = (float*)calloc(TraceLength, sizeof(float));	 
+	fread(data1, sizeof(float), TraceLength, rfp); 	
+	fwrite(data1, sizeof(float), TraceLength, wfp); 
+	for (i = 1; i < TraceNum; i++) 
+	{
+		fread(data2, sizeof(float), TraceLength, rfp); 		
+		SubAligned(data1, data2, windowsize, stepsize, threshold, TraceLength);  		
+		fwrite(data2, sizeof(float), TraceLength, wfp);  	
+	}
 	fclose(rfp);
 	fclose(wfp);
 
